@@ -1,0 +1,54 @@
+version: '2'
+services:
+
+  mongo:
+    image: mongo
+    volumes:
+    - data_vol:/data/db
+    environment:
+    - MONGO_AUTH_PASS="admin"
+
+  app:
+    build: ./app
+    volumes:
+    - data_vol:/opt/prometheus
+    - ./config:/opt/config
+    links:
+    - mongo
+    - prometheus
+    - alertmanager
+    ports:
+    - 12345:12345
+
+  nodeexp:
+    image: prom/node-exporter
+    links:
+      - prometheus
+
+  prometheus:
+    image: prom/prometheus
+    command: "-config.file=/opt/config/prometheus.yml -alertmanager.url=http://alertmanager:9093"
+    environment:
+    - VIRTUAL_HOST=prometheus
+    - VIRTUAL_PORT=9090
+    volumes:
+    - data_vol:/opt/prometheus
+    - ./config:/opt/config
+    links:
+    - alertmanager
+    ports:
+    - 9090:9090
+
+  alertmanager:
+    image: prom/alertmanager
+    command: "-config.file=/opt/config/alertmanager.yml"
+    volumes:
+    - data_vol:/opt/prometheus
+    - ./config:/opt/config
+    ports:
+    - 9093:9093
+
+volumes:
+  data_vol:
+    external: False
+    driver: local

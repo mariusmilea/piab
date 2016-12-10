@@ -1,0 +1,28 @@
+global:
+  smtp_smarthost: '127.0.0.1:25'
+  smtp_from: 'alertmanager@company.com'
+
+route:
+  receiver: 'catchall-mail'
+
+  routes:
+   {{ range .}}
+   - match:
+       {{- range $key, $val := .Label}}
+       {{ $key }}: {{ $val }}
+       {{- end }}
+     receiver: '{{ .Email }}-mail'
+   {{ end }}
+
+
+receivers:
+- name: 'catchall-mail'
+  email_configs:
+  - to: 'catchall@company.com'
+    require_tls: false
+{{range .}}
+- name: '{{ .Email }}-mail'
+  email_configs:
+  - to: '{{ .Email }}'
+    require_tls: false
+{{ end }}

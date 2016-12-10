@@ -1,0 +1,15 @@
+{{ range . }}
+ALERT {{ .Name }}
+    IF {{ .Expression }}
+    FOR {{ .Duration }}
+    LABELS {
+      {{- range $key, $val := .Label }}
+      {{ $key }}={{ $val }},
+      {{- end }}
+    }
+    ANNOTATIONS {
+      summary = "{{ .Summary }}",
+      description = "{{ .Description }}",
+      runbook = "{{ .Runbook }}",
+    }
+{{ end }}
