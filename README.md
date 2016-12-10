@@ -1,6 +1,5 @@
 # Piab = Prometheus in a box
 
-<br>
 ## Introduction
 
 This repo contains a dockerized setup for getting started with the Prometheus monitoring tool along with a small REST api to manage the alerts and the receivers.
@@ -10,16 +9,14 @@ Just follow the usage instructions from below and you're ready to go. You only n
 
 The included small API is very handy for managing the alerts and the receivers of the alerts. It's very simple and it uses a MongoDB backend to store the alerts and receivers.
 
-<br>
 ## Usage
 
 ```bash
-git clone https://github.com/mariusmilea/piab.git
+git clone git@github.com:mariusmilea/piab.git 
 
 make up
 ```
 
-<br>
 ## Web GUI
 
 ```
@@ -28,7 +25,6 @@ Prometheus: http://localhost:9090
 Alertmanager: http://localhost:9093
 ```
 
-<br>
 ## Methods
 
 **GET an alert**
@@ -73,7 +69,6 @@ curl -XPOST http://localhost:12345/v1/alerts/generate
 curl -XPOST http://localhost:12345/v1/receivers/generate
 ```
 
-<br>
 ## Note
 
 The localhost hostname can differ depending on the OS where this will be run from.
